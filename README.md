@@ -9,129 +9,44 @@ Mid - Large mammals (Wolves, Foxes, Moose, Deer, Cattle, Caribou, Coyotes...)
 
 Birds 
 
-Environmental and Landscape conditions: 
+## Confirmation of delivery 
 
-The 2024 dataset consists of 2.5 million camera trap images captured across multiple cameras at the Meadowbank site. A review of the overall environmental conditions indicates that the cameras operated under consistent Arctic/sub-Arctic weather patterns, with image characteristics typical of northern prairies and tundra landscapes. 
+Wild Animal Detection Summary.xlsx clearly listed all the major steps with detailed analyses 
 
-Most images were captured under cold-weather conditions, consistent with the Meadowbank climate. Common environmental and lanscape characteristics include: 
+meadowbank_prod.remote_cameras.md24_tws_manifest_2024_fianl summarized all the key output, final_category and json_output column including confidence and bounding box info from both of the models 
 
-Snow-covered ground during large portions of the dataset 
+Clean python code (can be easily ‘Run All’ once finished configuration in the first console): 
 
-Low contrast in dawn and dusk periods due to diffuse Arctic light 
+[Main] Wild Animal Detection Final.ipynb  
 
-Sun glare or snow glare, often creating bright reflections 
+Output 1. Generate Final Manifest Table.ipynb to generate the manifest final table including json_output column 
 
-Wind-driven motion, especially visible in grasses, flags, and loose materials 
+Output 2. Write Tagged Image to Designated Folder to draw bounding boxes on images then save to designated folder 
 
-Exposed rock formations (stones, gravel, boulders) 
+Volume Catalog Table Cleaning.ipynb for cleaning not needed volume tables 
 
-Sparse vegetation, including grass patches and shrubs 
+Manual Validation.ipynb to quickly browse through hundreds of images for model precision estimates 
 
-Flags or survey markers placed near camera sites 
+## Additional:  
 
-These conditions contribute significantly to camera false-trigger events and increase false positives for AI detection models. 
+tagged animal/vehicle/human images saved in designated folder at: Volumes/meadowbank_prod/remote_cameras/mbk_remote_cameras_blob/results/2024_TWS 
 
- 
+Wild Animal Data Dictionary.xlsx 
 
- 
+Wild Animal QA.sql (the SQL script for SQL users to easily use manifest table) 
 
-Model reliability 
+Wild Animal QA.xlsx expected output from part c 
 
-Model  
+‘Supporting Analyses Folder’ includes 
 
-Recall  
+Group Images Based on Timestamp and File Name.ipynb that generate md24_tws_event_id_2024 table with group_id  
 
-Precision  
+Images by Cameara 4. ipynb 
 
-Suitability for Meadowbank  
+Post-processing filter analyes.ipynb (motion score logic) 
 
-Notes   
+## Overall project success 
 
-MDv5a  
+The manual validation involves 10 randomly selected images for the scope of the work. Then to support the final threshold decision making, we randomly selected 100 images for 0.5 threshold as well as 0.2 threshold, through manual validation, 63 images and 37 images retruend as wild animals out of the 100 images tagged by the model, that gives us 63% precision with 0.5 threshold and 37% precision with 0.2 threshold 
+<img width="870" height="677" alt="image" src="https://github.com/user-attachments/assets/4684c19e-9e93-4458-837f-d2ceec085036" />
 
-High  
-
-Medium 
-
-Pre-filter / initial flagging  
-
-Over-detects shadows & snow artifacts   
-
-YOLOv10-MDv6  
-
-Medium  
-
-Medium High  
-
-Secondary validation  
-
-More reliable but still affected by environmental noise   
-
-Combined Output  
-
-Very High  
-
-Medium To Medium High 
-
-Balanced approach  
-
-Minimizes missed wildlife events   
-
- 
-
-The Meadowbank 2024 dataset presented a series of environmental and operational challenges that directly impact automated wildlife detection. The two primary models applied—MegaDetector v5a and YOLOv10-MDv6 (YOLO9c-based)—were evaluated for their reliability under the specific conditions of this project. 
-
-1. MegaDetector v5a (MDv5a) 
-
-Purpose: Animal/Vehicle/Human detection with bounding boxes 
-
-Strengths: 
-
-High sensitivity to potential animal shapes 
-
-Robust general-purpose wildlife detector trained on large global datasets 
-
-Good at flagging any content that might contain an animal (high recall) 
-
-Produces structured detection outputs (class, confidence, bounding boxes) 
-
-Limitations Observed in This Project: 
-
-High false-positive rate in snowy and low-contrast images 
-
-Sensitive to shadows, rocks, grass movement, and flagging tape 
-
-Sometimes identifies camera artifacts as animal silhouettes 
-
-Reliability Assessment: 
-
-High recall, but only medium precision in Meadowbank conditions 
-
-Very effective as a supporting step because of high recall (tends to capture more images) 
-
-2. YOLOv10-MDv6 (YOLOv9c Classifier + MDv6-tuned) 
-
-Purpose: Animal/Vehicle/Human detection with bounding boxes 
-Strengths: 
-
-Higher precision than MDv5a because more hyperparameters were used to train the model 
-
-Better at rejecting false positives caused by snow glare 
-
-More stable performance across daytime, dawn, and night IR images 
-
-Produces structured detection outputs (class, confidence, bounding boxes) 
-
-Limitations Observed: 
-
-Still susceptible to wind-driven vegetation and snow reflections 
-
-False positives remain possible when no true wildlife is present in the environment 
-
-Infrared nighttime images have slightly reduced reliability 
-
-Reliability Assessment: 
-
-Moderate-to-high precision, medium recall 
-
-Best used to validate or invalidate along with MDv5a detections 
